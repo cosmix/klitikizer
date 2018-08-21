@@ -5,7 +5,7 @@ namespace Cosmix\Klitikizer;
 class Klitikizer
 {
     /**
-     * @var array the accented greek vowels. TODO: why on earth is this here.
+     * @var array the accented greek vowels.
      */
     const ACCENTED_GREEK_VOWELS = ['ά', 'έ', 'ί', 'ή', 'ό', 'ώ', 'ύ', 'Ά', 'Έ', 'Ί', 'Ή', 'Ό', 'Ώ', 'Ύ'];
 
