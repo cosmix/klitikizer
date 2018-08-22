@@ -1,14 +1,12 @@
-language: php
-php:
-  - '7.1'
+sudo: required
+services:
+  - docker
 before_install:
-  - sudo apt-get install -y aspell aspell-el
-  - cd /tmp
-  - git clone --depth 1 https://github.com/php/php-src.git
-  - cd php-src/ext/pspell
-  - phpize
-  - ./configure
-  - make
-  - echo "extension=/tmp/php-src/pspell.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+  - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+  - sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+  - sudo apt-get update
+  - sudo apt-get -y install docker-ce
+  - docker build -t cosmix/klitikizer .
+  - docker run -d cosmix/klitikizer 'cd /klitikizer; ./vendor/phpunit tests'
 install:
   - composer install
