@@ -7,6 +7,4 @@ before_install:
   - sudo apt-get update
   - sudo apt-get -y install docker-ce
   - docker build -t cosmix/klitikizer .
-  - docker run -d cosmix/klitikizer 'cd /klitikizer; ./vendor/phpunit tests'
-install:
-  - composer install
+  - docker run cosmix/klitikizer
