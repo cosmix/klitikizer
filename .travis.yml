@@ -2,6 +2,6 @@ language: php
 php:
   - '7.1'
 before_install:
-  - sudo apt-get install -y aspell aspell-el
+  - sudo apt-get install -y aspell aspell-el php-pspell php-mbstring
 install:
   - composer install
