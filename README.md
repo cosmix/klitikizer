@@ -6,6 +6,17 @@ Klitikizer is a very simple class for PHP 7.1+ that returns the vocative case fo
 
 ## Requirements
 
-You need Aspell with the Greek dictionary already installed in your system. Consult the Aspell documentation for more information about how to do this, depending on your Operating System. 
+You need Aspell with the Greek dictionary already installed in your system. Consult the Aspell documentation for more information about how to do this, depending on your Operating System. The included Dockerfile can help identify dependencies, on linux hosts.
 
-You also need PHP 7.1+ to use this class. You also need the `intl` and `pspell` extensions (this is because the class makes use of the `Normalizer` to quickly replace accented characters with the non-accented/decomposed versions thereof and Pspell provides an interface to Aspell) Other than that, you should be able to make use of it as is.
+Klitikizer requires PHP 7.1+. You also need the `intl` and `pspell` extensions (this is because the class makes use of the `Normalizer` to quickly replace accented characters with the non-accented/decomposed versions thereof and Pspell provides an interface to Aspell) Other than that, you should be able to make use of it as is.
+
+## Usage
+
+See examples. In short:
+
+```
+$klit = new Klitikizer();
+$res = $klit->getKlitikiForName('Κώστας', true);
+```
+
+The first parameter of `getKlitikiForName` is the (preferrably Greek) name you wish to convert and the second is a boolean specifying whether it's a first or last name. The function is safe for use with non-Greek names, including Unicode strings of course.
