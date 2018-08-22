@@ -20,7 +20,8 @@
     ],
     "require": {
         "php": ">=7.1",
-        "ext-intl": "*"
+        "ext-intl": "*",
+        "ext-pspell": "*"
     },
     "require-dev": {
         "phpunit/phpunit": "^5.7 || ^6.4 || ^7.0"
