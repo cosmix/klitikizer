@@ -2,6 +2,13 @@ language: php
 php:
   - '7.1'
 before_install:
-  - sudo apt-get install -y aspell aspell-el php-pspell php-mbstring
+  - sudo apt-get install -y aspell aspell-el
+  - cd /tmp
+  - git clone --depth 1 https://github.com/php/php-src.git
+  - cd php-src/ext/pspell
+  - phpize
+  - ./configure
+  - make
+  - echo "extension=/tmp/php-src/pspell.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
 install:
   - composer install
