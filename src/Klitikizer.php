@@ -47,59 +47,69 @@ class Klitikizer
 
         if (in_array(mb_substr($name, -2), ['ος', 'ός'])) {
             if ($accent_offset < 1) { // unaccented
-                // try to add accent.
-                $n_name = $this->suggestionFor(mb_strtolower($name));
-                if ($n_name === mb_strtolower(($name))) { // no accent was found.
-                    $syllable_count = $this->countSyllables($name);
-
-                    if ($syllable_count == 2) {
-                        return preg_replace("/(.)ς$/u", "\\1", $name);
-                    } else {
-                        return preg_replace("/(.)(ο|ό)ς/u", '\\1ε', $name);
-                    }
-                } else {
-                    return $this->getKlitikiForName(mb_convert_case($n_name, MB_CASE_TITLE), $is_first_name);
-                }
+                return $this->handleUnaccented($name, $is_first_name);
             } else {
-                switch ($accent_offset) {
-                    case 1:
-                        return preg_replace("/ός/u", 'έ', $name);
-                        break;
-                    case 2:
-                        $syllable_count = $this->countSyllables($name) == 2;
-
-                        if ($is_first_name) {
-                            if ($syllable_count == 2) {
-                                return preg_replace("/ος/u", 'ο', $name);
-                            } else {
-                                return preg_replace("/ος/u", 'ε', $name);
-                            }
-                        } else {
-                            $matched = false;
-
-                            foreach (['ούκος', 'άτος', 'άκος', 'ίτσος'] as $suffix) {
-                                if (mb_substr($name, -count($suffix) == $suffix)) {
-                                    $matched = true;
-                                    break;
-                                }
-                            }
-
-                            if ($syllable_count == 2 || ($syllable_count > 2 && $matched)) {
-                                return preg_replace("/ος/u", 'ο', $name);
-                            } else {
-                                return preg_replace("/ος/u", 'ε', $name);
-                            }
-                        }
-                        break;
-                    default:
-                        return preg_replace("/ος/u", 'ε', $name);
-                }
+                return $this->handleAccented($name, $is_first_name, $accent_offset);
             }
         } elseif (in_array(mb_substr($name, -2), ['ης', 'ής', 'ας', 'άς', 'ις'])) {
             return preg_replace("/(.)ς$/u", '\1', $name);
         }
 
         return $name;
+    }
+
+    private function handleUnaccented(string $name, bool $is_first_name)
+    {
+        //try to add accent.
+        $n_name = $this->suggestionFor(mb_strtolower($name));
+        if ($n_name === mb_strtolower(($name))) { // no accent was found.
+            $syllable_count = $this->countSyllables($name);
+
+            if ($syllable_count == 2) {
+                return preg_replace("/(.)ς$/u", "\\1", $name);
+            } else {
+                return preg_replace("/(.)(ο|ό)ς/u", '\\1ε', $name);
+            }
+        } else {
+            return $this->getKlitikiForName(mb_convert_case($n_name, MB_CASE_TITLE), $is_first_name);
+        }
+    }
+
+    private function handleAccented(string $name, bool $is_first_name, int $accent_offset)
+    {
+        switch ($accent_offset) {
+            case 1:
+                return preg_replace("/ός/u", 'έ', $name);
+                break;
+            case 2:
+                $syllable_count = $this->countSyllables($name) == 2;
+
+                if ($is_first_name) {
+                    if ($syllable_count == 2) {
+                        return preg_replace("/ος/u", 'ο', $name);
+                    } else {
+                        return preg_replace("/ος/u", 'ε', $name);
+                    }
+                } else {
+                    $matched = false;
+
+                    foreach (['ούκος', 'άτος', 'άκος', 'ίτσος'] as $suffix) {
+                        if (mb_substr($name, -count($suffix) == $suffix)) {
+                            $matched = true;
+                            break;
+                        }
+                    }
+
+                    if ($syllable_count == 2 || ($syllable_count > 2 && $matched)) {
+                        return preg_replace("/ος/u", 'ο', $name);
+                    } else {
+                        return preg_replace("/ος/u", 'ε', $name);
+                    }
+                }
+                break;
+            default:
+                return preg_replace("/ος/u", 'ε', $name);
+        }
     }
 
     /**
@@ -117,7 +127,6 @@ class Klitikizer
         $matches = array_reverse($matches[0]);
 
         foreach ($matches as $match) {
-
             $chars_ra = preg_split('/(?<!^)(?!$)/u', $match);
 
             foreach ($chars_ra as $a_char) {
