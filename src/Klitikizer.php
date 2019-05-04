@@ -77,39 +77,61 @@ class Klitikizer
 
     private function handleAccented(string $name, bool $is_first_name, int $accent_offset)
     {
+        $retValue = "";
+        
         switch ($accent_offset) {
             case 1:
-                return preg_replace("/ός/u", 'έ', $name);
+                $retValue =  preg_replace("/ός/u", 'έ', $name);
                 break;
             case 2:
-                $syllable_count = $this->countSyllables($name) == 2;
+                
+                $syllable_count = $this->countSyllables($name);
 
                 if ($is_first_name) {
-                    if ($syllable_count == 2) {
-                        return preg_replace("/ος/u", 'ο', $name);
-                    } else {
-                        return preg_replace("/ος/u", 'ε', $name);
-                    }
+                    $retValue = $this->handleFirstName($name, $syllable_count);
                 } else {
-                    $matched = false;
-
-                    foreach (['ούκος', 'άτος', 'άκος', 'ίτσος'] as $suffix) {
-                        if (mb_substr($name, -count($suffix) == $suffix)) {
-                            $matched = true;
-                            break;
-                        }
-                    }
-
-                    if ($syllable_count == 2 || ($syllable_count > 2 && $matched)) {
-                        return preg_replace("/ος/u", 'ο', $name);
-                    } else {
-                        return preg_replace("/ος/u", 'ε', $name);
-                    }
+                    $retValue = $this->handleLastName($name, $syllable_count);
                 }
                 break;
             default:
-                return preg_replace("/ος/u", 'ε', $name);
+                $retValue =  preg_replace("/ος/u", 'ε', $name);
         }
+
+        return $retValue;
+    }
+
+    private function handleFirstName(string $name, int $syllable_count): string
+    {
+        $retValue = '';
+
+        if ($syllable_count == 2) {
+            $retValue =  preg_replace("/ος/u", 'ο', $name);
+        } else {
+            $retValue =  preg_replace("/ος/u", 'ε', $name);
+        }
+
+        return $retValue;
+    }
+
+    private function handleLastName(string $name, int $syllable_count): string
+    {
+        $matched = false;
+        $retValue = '';
+
+        foreach (['ούκος', 'άτος', 'άκος', 'ίτσος'] as $suffix) {
+            if (mb_substr($name, -strlen($suffix)) == $suffix) {
+                $matched = true;
+                break;
+            }
+        }
+
+        if ($syllable_count == 2 || ($syllable_count > 2 && $matched === true)) {
+            $retValue =  preg_replace("/ος/u", 'ο', $name);
+        } else {
+            $retValue =  preg_replace("/ος/u", 'ε', $name);
+        }
+
+        return $retValue;
     }
 
     /**
