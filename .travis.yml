@@ -4,7 +4,7 @@ php:
 sudo: required
 services:
   - docker
-env: CC_TEST_REPORTER=f059456e23da009a95bee3f089155a2a2a4ca81a7f21f7d41de472a8d9f7a646
+env: CC_TEST_REPORTER_ID=f059456e23da009a95bee3f089155a2a2a4ca81a7f21f7d41de472a8d9f7a646
 before_install:
   - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
   - sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
@@ -22,4 +22,4 @@ script:
   - docker exec -it klitik ./vendor/bin/phpunit tests
 after_success:
   - docker exec -it klitik ./vendor/bin/phpunit --coverage-clover /tmp/clover.xml
-  - ./cc-test-reporter after-build /tmp/clover.xml --debug -t clover --exit-code $TRAVIS_TEST_RESULT
+  - ./cc-test-reporter after-build /tmp/clover.xml --debug -t clover  -p /klitikizer --exit-code $TRAVIS_TEST_RESULT
