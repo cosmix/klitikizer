@@ -1,11 +1,25 @@
+language: php
+php:
+  - '7.1'
 sudo: required
 services:
   - docker
+env: CC_TEST_REPORTER=f059456e23da009a95bee3f089155a2a2a4ca81a7f21f7d41de472a8d9f7a646
 before_install:
   - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
   - sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
   - sudo apt-get update
   - sudo apt-get -y install docker-ce
   - docker build -t cosmix/klitikizer .
+before_script:
+  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+  - chmod +x ./cc-test-reporter
+  - ./cc-test-reporter before-build --debug
+  - GIT_BRANCH=$TRAVIS_PULL_REQUEST_BRANCH
+  - GIT_COMMIT_SHA=$TRAVIS_PULL_REQUEST_SHA
 script:
-  - docker run cosmix/klitikizer
+  - docker run -it -d --rm --name klitik -v "$(pwd)":/tmp cosmix/klitikizer #./vendor/bin/phpunit tests
+  - docker exec -it klitik ./vendor/bin/phpunit tests
+after_success:
+  - docker exec -it klitik ./vendor/bin/phpunit --coverage-clover /tmp/clover.xml
+  - ./cc-test-reporter after-build /tmp/clover.xml --debug -t clover --exit-code $TRAVIS_TEST_RESULT

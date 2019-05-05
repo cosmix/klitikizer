@@ -1,4 +1,4 @@
-FROM php:7.1.20-cli-stretch
+FROM php:7.1-cli-stretch
 
 COPY . /klitikizer
 
@@ -9,10 +9,12 @@ RUN php /tmp/composer-setup.php --install-dir /usr/local/bin/ --filename compose
     docker-php-source extract && \
     docker-php-ext-install pspell intl && \
     docker-php-source delete && \
+    pecl install xdebug && \
+    docker-php-ext-enable xdebug && \
     cd /klitikizer && \
     composer install
 
 
 
 WORKDIR /klitikizer
-CMD ["./vendor/bin/phpunit", "tests"]
+# CMD ["./vendor/bin/phpunit", "tests"]
