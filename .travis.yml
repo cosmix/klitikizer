@@ -22,4 +22,4 @@ script:
   - docker exec -it klitik ./vendor/bin/phpunit tests
 after_success:
   - docker exec -it klitik ./vendor/bin/phpunit --coverage-clover /tmp/clover.xml
-  - ./cc-test-reporter after-build /tmp/clover.xml --debug -t clover --exit-code $TRAVIS_TEST_RESULT
+  - ./cc-test-reporter after-build /tmp/clover.xml --debug -t clover  -p /klitikizer/src/ --exit-code $TRAVIS_TEST_RESULT
