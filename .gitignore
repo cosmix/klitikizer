@@ -3,3 +3,4 @@
 .LSOverride
 
 /vendor
+.phpunit.result.cache
