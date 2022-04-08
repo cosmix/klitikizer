@@ -1,4 +1,4 @@
-FROM php:7.1-cli-stretch
+FROM php:8.1-cli-buster
 
 COPY . /klitikizer
 
