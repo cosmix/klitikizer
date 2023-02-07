@@ -2,7 +2,6 @@
 
 [![Build Status](https://travis-ci.org/cosmix/klitikizer.svg?branch=develop)](https://travis-ci.org/cosmix/klitikizer)
 [![Maintainability](https://api.codeclimate.com/v1/badges/a569882bbc173010655f/maintainability)](https://codeclimate.com/github/cosmix/klitikizer/maintainability)
-[![Test Coverage](https://api.codeclimate.com/v1/badges/a569882bbc173010655f/test_coverage)](https://codeclimate.com/github/cosmix/klitikizer/test_coverage)
 
 Klitikizer is a very simple class for PHP 7.1+ that returns the vocative case for Greek names, both first and surnames. Its aim is to eliminate the unsightly phenomenon you may have experienced when interacting with Greek e-shops, startups and other organisations that make use of PHP and just stick to the nominative case when addressing their partners, customers, users etc.
 
